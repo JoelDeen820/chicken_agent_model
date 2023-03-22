@@ -1,0 +1,8 @@
+name: chicken_agent_model
+channels:
+  - defaults
+dependencies:
+  - seaborn
+  - matplotlib
+  - numpy
+  - jupyterlab
