@@ -6,3 +6,4 @@ dependencies:
   - matplotlib
   - numpy
   - jupyterlab
+  - scikit-image
