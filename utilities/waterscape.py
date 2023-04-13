@@ -3,6 +3,8 @@ from skimage.draw import disk
 
 from chicken_utils import CENTIMETERS_PER_PIXEL
 
+RESOURCE_MAX = 100
+
 
 def make_visible_locs(vision):
     """Computes the kernel of visible cells.
@@ -21,7 +23,7 @@ def make_visible_locs(vision):
 
 
 class WaterScape:
-    DISTANCE_BETWEEN_NIPPLES = 0.1  # in meters
+    DISTANCE_BETWEEN_NIPPLES = 0.35  # in meters
     WATER_RADIUS = 0.01  # in meters
     DISTANCE_BETWEEN_LINES = 3.0  # in meters
     NUM_LINES = 2
@@ -67,7 +69,7 @@ class WaterScape:
         self.__generate_waterlines()
         self.__occupancy_grid = np.zeros(size, dtype=np.uint8)
 
-    def get_waterline_vision(self, center: tuple[int, int], vision: int) -> np.array:
+    def get_vision(self, center: tuple[int, int], vision: int) -> np.array:
         """ Find the visible waterline points for bird consumption.
 
         center: tuple, (x, y) in pixels
@@ -77,3 +79,11 @@ class WaterScape:
         visible_locations = make_visible_locs(vision) + center
         visible_space = self.waterline_array[visible_locations[:, 0], visible_locations[:, 1]]
         return visible_locations[np.argwhere(visible_space == 1)][:, 0, :]
+
+    def get_resource(self, point: tuple[int, int]) -> float:
+        """Get the resource at the given point.
+
+        point: tuple, (x, y) in pixels
+
+        returns: float, resource at the given point."""
+        return self.waterline_array[point] * 100
