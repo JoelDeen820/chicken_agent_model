@@ -4,6 +4,10 @@ from random import random
 
 import numpy as np
 
+from utilities.chicken_utils import CENTIMETERS_PER_PIXEL
+
+def generate_random_angle():
+    return np.random.random() * 2 * pi - pi
 
 class ChickenNeed(Enum):
     HAPPY = 0
@@ -11,18 +15,19 @@ class ChickenNeed(Enum):
     HUNGER = 2
     TEMPERATURE = 3
 
-
 class Chicken:
     BASE_HUNGER = 25
-    BASE_THIRST = 100
+    AVG_THIRST = 75
+    STD_THIRST = 10
+    THIRST_TRIGGER = 50
 
-    IDEAL_MAX_TEMP = 20
-    IDEAL_MIN_TEMP = 25
+    IDEAL_MAX_TEMP = 25
+    IDEAL_MIN_TEMP = 20
 
     THIRST_DECAY = 1
     HUNGER_DECAY = 1
 
-    BIRD_VISION = 7
+    BIRD_VISION = int(33 // CENTIMETERS_PER_PIXEL)
     BIRD_VISION_DEVIATION = 1
 
     def __init__(self, loc):
@@ -32,20 +37,42 @@ class Chicken:
         """
 
         self.loc = tuple(loc)
-        self.thirst = 100
+        self.thirst = int(np.random.normal(self.AVG_THIRST, self.STD_THIRST))
         self.hunger = 25
         self.temperature = np.random.randint(Chicken.IDEAL_MIN_TEMP, Chicken.IDEAL_MAX_TEMP)
-        self.search_angle = np.nan
+        self.search_angle = generate_random_angle()
+        self.need = ChickenNeed.HAPPY
 
-        self.vision = self.BIRD_VISION * np.random.randint(0, 3) - self.BIRD_VISION_DEVIATION
+        self.vision = self.BIRD_VISION
+
+
+
+    def __evaluate_need(self) -> None:
+        """Returns the need of the chicken
+
+        """
+        if self.thirst < self.THIRST_TRIGGER:
+            self.need = ChickenNeed.THIRST
+        elif self.hunger < 0:
+            self.need = ChickenNeed.HUNGER
+        elif self.temperature < Chicken.IDEAL_MIN_TEMP or self.temperature > Chicken.IDEAL_MAX_TEMP:
+            self.need = ChickenNeed.TEMPERATURE
+        else:
+            self.need = ChickenNeed.HAPPY
 
     def step(self, env):
         """Look around, move, and harvest.
 
         env: Barn
         """
-        self.loc = env.look_and_move(self.loc, self.vision)
-        self.thirst += env.waterlines.get_resource(self.loc) - Chicken.THIRST_DECAY
+        thirst_addition = 0
+        self.__evaluate_need()
+        self.loc = env.look_and_move(self.loc, self.vision, self.need, self.search_angle)
+        if self.need == ChickenNeed.THIRST:
+            thirst_addition = env.waterlines.get_resource(self.loc)
+        self.thirst += thirst_addition - Chicken.THIRST_DECAY
+        if thirst_addition != 0:
+            self.search_angle = generate_random_angle()
         # self.hunger += env.eat(self.loc)
         # self.temperature += env.temp(self.loc)
 
