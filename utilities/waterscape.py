@@ -4,8 +4,6 @@ from skimage.draw import disk
 from utilities.chicken_utils import CENTIMETERS_PER_PIXEL, filter_locs, make_visible_locs
 from utilities.need_not_availible import NeedNotFoundException
 
-RESOURCE_MAX = 100
-
 
 class WaterScape:
     DISTANCE_BETWEEN_NIPPLES = 0.35  # in meters
@@ -19,7 +17,6 @@ class WaterScape:
     PIXELS_BETWEEN_NIPPLES = int(DISTANCE_BETWEEN_NIPPLES * 100 / CENTIMETERS_PER_PIXEL)
     X_PERMINITER_OFFSET_PIXELS = int(X_PERMINITER_OFFSET * 100 / CENTIMETERS_PER_PIXEL)
     Y_PERMINITER_OFFSET_PIXELS = int(Y_PERMINITER_OFFSET * 100 / CENTIMETERS_PER_PIXEL)
-
 
     def __draw_water_radius(self, points: list[tuple[int, int]]) -> None:
         """Draws the water radius around the given points."""

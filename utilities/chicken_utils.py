@@ -1,4 +1,3 @@
-
 import numpy as np
 
 CENTIMETERS_PER_PIXEL = 3.0
@@ -10,7 +9,7 @@ def filter_locs(locs: np.ndarray, size: tuple[int, int]) -> np.ndarray:
                                np.logical_and(locs[:, 1] >= 0, locs[:, 1] < size[1]))]
 
 
-def make_visible_locs(vision: int):
+def make_visible_locs(vision: int) -> np.ndarray:
     """Computes the kernel of visible cells.
 
     vision: int distance

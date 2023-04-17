@@ -8,6 +8,5 @@ def main(args=None):
         barn.step()
 
 
-
 if __name__ == '__main__':
     main()

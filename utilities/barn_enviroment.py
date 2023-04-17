@@ -22,7 +22,7 @@ def make_locs(n, m):
     return np.array(t)
 
 
-def draw_array(array, **options):
+def draw_array(array, **options) -> None:
     """Draws the cells."""
     n, m = array.shape
     options = underride(options,
@@ -63,6 +63,7 @@ class Barn:
         self.occupacy = set()
         self.chickens = []
         self.__create_chickens(num_chickens)
+        self.points = None
 
     def look_and_move(self, loc: tuple[int, int], vision: int, need: ChickenNeed, wander_angle: float) -> tuple[
         int, int]:
@@ -97,8 +98,7 @@ class Barn:
         return empty_locs[0]
 
     def wander(self, loc: tuple[int, int], vision: int, wander_angle: float) -> tuple[int, int]:
-        """
-
+        """ Gets the bird to look around the barn for the required resource.
         """
         wander_samples = 20
 
@@ -123,7 +123,7 @@ class Barn:
         else:
             return empty_locs[0]
 
-    def step(self):
+    def step(self) -> None:
         """Simulates one time step."""
         random_order = np.random.permutation(self.chickens)
         for chicken in random_order:
@@ -131,7 +131,8 @@ class Barn:
             chicken.step(self)
             self.occupacy.add(chicken.loc)
 
-    def get_coords(self):
+    def get_coords(self) -> tuple[np.ndarray, np.ndarray]:
+        """Gets the coordinates of the chickens."""
 
         chickens = self.chickens
         rows, cols = np.transpose([chicken.loc for chicken in chickens])
@@ -139,7 +140,9 @@ class Barn:
         ys = rows + 0.5
         return xs, ys
 
-    def draw(self):
+    def draw(self) -> None:
+        """ Draws the Top-Down view of the barn
+        """
         draw_array(self.waterlines.waterline_array, cmap='viridis', origin='upper')
 
         xs, ys = self.get_coords()

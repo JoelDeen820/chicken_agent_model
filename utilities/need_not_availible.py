@@ -1,5 +1,5 @@
-
 from utilities.chicken import ChickenNeed
+
 
 class NeedNotFoundException(Exception):
     def __init__(self, need: ChickenNeed):

@@ -1,6 +1,7 @@
 
 import numpy as np
 
+
 class TempScape:
 
     def __generate_tube_heater_distrobution(self, size: tuple) -> np.ndarray:
