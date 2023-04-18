@@ -3,7 +3,6 @@ from math import pi
 
 import numpy as np
 
-from utilities.barn_enviroment import Barn
 from utilities.chicken_utils import CENTIMETERS_PER_PIXEL
 
 
@@ -62,7 +61,7 @@ class Chicken:
         else:
             self.need = ChickenNeed.HAPPY
 
-    def __evaluate_thirst(self, env: Barn) -> None:
+    def __evaluate_thirst(self, env) -> None:
         """ Sets the need of the chicken based on its current state.
 
         """
@@ -73,7 +72,7 @@ class Chicken:
         if thirst_addition != 0:
             self.search_angle = generate_random_angle()
 
-    def step(self, env: Barn) -> None:
+    def step(self, env) -> None:
         """Look around, move, and harvest.
 
         env: Barn
