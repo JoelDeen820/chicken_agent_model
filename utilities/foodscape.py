@@ -48,6 +48,9 @@ class FoodScape:
         size: tuple, (width, height) in pixels
         """
         self.size = size
+        num_troughs: int = size[0] // self.PIXELS_BETWEEN_TROUGHS
+        self.num_troughs: int = int(num_troughs)
+        self.num_lines: int = size[1] // self.PIXELS_BETWEEN_LINES
         self.feedline_array: np.array = np.zeros(size, dtype=np.uint8)
         self.__generate_feedlines()
         self.__occupancy_grid: np.array = np.zeros(size, dtype=np.uint8)
