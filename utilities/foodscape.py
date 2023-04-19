@@ -5,11 +5,11 @@ from utilities.chicken_utils import CENTIMETERS_PER_PIXEL, filter_locs, make_vis
 from utilities.need_not_availible import NeedNotFoundException
 
 class FoodScape:
-    DISTANCE_BETWEEN_TROUGHS = 0.35  # in meters
-    FEED_RADIUS = 0.1  # in meters
+    DISTANCE_BETWEEN_TROUGHS = 0.5  # in meters
+    FEED_RADIUS = 0.3  # in meters
     DISTANCE_BETWEEN_LINES = 3.0  # in meters
     NUM_LINES = 2
-    X_PERMINITER_OFFSET = 1.0  # meters
+    X_PERMINITER_OFFSET = 3.0  # meters
     Y_PERMINITER_OFFSET = 0.03  # meters
     PIXELS_BETWEEN_LINES = int(DISTANCE_BETWEEN_LINES * 100 / CENTIMETERS_PER_PIXEL)
     FEED_RADIUS_PIXELS = int(FEED_RADIUS * 100 / CENTIMETERS_PER_PIXEL)
