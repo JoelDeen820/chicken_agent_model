@@ -6,7 +6,7 @@ from utilities.need_not_availible import NeedNotFoundException
 
 class FoodScape:
     DISTANCE_BETWEEN_TROUGHS = 1  # in meters
-    FEED_RADIUS = 0.3  # in meters
+    FEED_RADIUS = 0.1  # in meters
     DISTANCE_BETWEEN_LINES = 3.0  # in meters
     NUM_LINES = 2
     X_PERMINITER_OFFSET = 2.0  # meters
