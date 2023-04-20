@@ -6,9 +6,9 @@ from utilities.need_not_availible import NeedNotFoundException
 
 
 class WaterScape:
-    DISTANCE_BETWEEN_NIPPLES = 0.35  # in meters
-    WATER_RADIUS = 0.1  # in meters
-    DISTANCE_BETWEEN_LINES = 3.0  # in meters
+    DISTANCE_BETWEEN_NIPPLES = 0.1  # in meters
+    WATER_RADIUS = 0.05  # in meters
+    DISTANCE_BETWEEN_LINES = 2.5  # in meters
     NUM_LINES = 2
     X_PERMINITER_OFFSET = 1.0  # meters
     Y_PERMINITER_OFFSET = 0.03  # meters

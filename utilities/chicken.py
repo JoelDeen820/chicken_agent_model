@@ -72,6 +72,16 @@ class Chicken:
         if thirst_addition != 0:
             self.search_angle = generate_random_angle()
 
+    def __evaluate_hunger(self, env) -> None:
+        """ Gets the bird to eat and evaluate hunger"""
+
+        hunger_addition = 0
+        if self.need == ChickenNeed.HUNGER:
+            hunger_addition = env.feedlines.get_resource(self.loc)
+        self.hunger += hunger_addition - Chicken.HUNGER_DECAY
+        if hunger_addition != 0:
+            self.search_angle = generate_random_angle()
+
     def step(self, env) -> None:
         """Look around, move, and harvest.
 
@@ -81,5 +91,5 @@ class Chicken:
         self.__evaluate_need()
         self.loc = env.look_and_move(self.loc, self.vision, self.need, self.search_angle)
         self.__evaluate_thirst(env)
-        # self.hunger += env.eat(self.loc)
+        self.__evaluate_hunger(env)
         # self.temperature += env.temp(self.loc)
