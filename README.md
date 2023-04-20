@@ -15,7 +15,7 @@ To-Do List
 - [x] Create a simple barn environment
   - This will need to be appended to as the other few classes are added
 - [x] Create a simple chicken
-- [ ] Create the Feedline Class
+- [x] Create the Feedline Class
   - Center needs to affect occupancy of the barn its self (about 10 cm Diameter)
   - The feeder needs to be able to be filled with food (See waterline implementation)
 - [x] Create the Waterline Class

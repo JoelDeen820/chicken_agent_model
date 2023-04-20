@@ -8,6 +8,7 @@ from utilities.chicken_utils import filter_locs
 from utilities.need_not_availible import NeedNotFoundException
 from utilities.utils import underride
 from utilities.waterscape import WaterScape
+from utilities.foodscape import FoodScape
 
 
 def make_locs(n, m):
@@ -57,7 +58,7 @@ class Barn:
 
     def __init__(self, size: tuple, num_chickens=500) -> None:
         self.waterlines = WaterScape(size)
-        # self.feedlines = FoodScape(size)
+        self.feedlines = FoodScape(size)
         # self.temp_fluxuations = TempScape(size)
         self.barn_size = size
         self.occupacy = set()
@@ -80,7 +81,7 @@ class Barn:
             if need == ChickenNeed.THIRST:
                 locs = self.waterlines.get_vision(loc, vision)
             elif need == ChickenNeed.HUNGER:
-                pass
+                locs = self.feedlines.get_vision(loc, vision)
             elif need == ChickenNeed.TEMPERATURE:
                 pass
         except NeedNotFoundException:
@@ -144,6 +145,7 @@ class Barn:
         """ Draws the Top-Down view of the barn
         """
         draw_array(self.waterlines.waterline_array, cmap='viridis', origin='upper')
+        draw_array(self.feedlines.feedline_array, cmap='viridis', origin='upper')
 
         xs, ys = self.get_coords()
         self.points = plt.plot(xs, ys, '.', color='white')[0]
