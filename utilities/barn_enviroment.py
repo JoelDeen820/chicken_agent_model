@@ -145,6 +145,7 @@ class Barn:
         """ Draws the Top-Down view of the barn
         """
         draw_array(self.waterlines.waterline_array, cmap='viridis', origin='upper')
+        draw_array(self.feedlines.feedline_array, cmap='viridis', origin='upper')
 
         xs, ys = self.get_coords()
         self.points = plt.plot(xs, ys, '.', color='white')[0]
