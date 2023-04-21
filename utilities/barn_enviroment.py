@@ -2,6 +2,8 @@ from math import pi
 
 import matplotlib.pyplot as plt
 import numpy as np
+from time import sleep
+from IPython.display import clear_output
 
 from utilities.chicken import Chicken, ChickenNeed
 from utilities.chicken_utils import filter_locs
@@ -149,3 +151,25 @@ class Barn:
 
         xs, ys = self.get_coords()
         self.points = plt.plot(xs, ys, '.', color='white')[0]
+
+    def animate(self, interval=0.1, frames=10, step=None) -> None:
+        """ Animates a Top-Down view of the barn environment
+
+            frames: number of frames to draw
+            interval: time between frames in seconds
+        """
+        if step == None:
+            step = self.step
+
+        try:
+            for i in range(frames-1):
+                self.draw()
+                plt.show()
+                if interval:
+                    sleep(interval)
+                step()
+                clear_output(wait=True)
+            self.draw()
+            plt.show()
+        except KeyboardInterrupt:
+            pass
