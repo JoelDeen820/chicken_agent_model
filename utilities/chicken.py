@@ -89,7 +89,7 @@ class Chicken:
         """
         thirst_addition = 0
         self.__evaluate_need()
-        self.loc = env.look_and_move(self.loc, self.vision, self.need, self.search_angle)
+        self.loc = env.look_and_move(self.loc, self.vision, self.need, generate_random_angle())
         self.__evaluate_thirst(env)
         self.__evaluate_hunger(env)
         # self.temperature += env.temp(self.loc)
