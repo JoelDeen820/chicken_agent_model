@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from time import sleep
 from IPython.display import clear_output
+from scipy.signal import convolve2d
 
 from utilities.chicken import Chicken, ChickenNeed
 from utilities.chicken_utils import filter_locs
@@ -41,6 +42,15 @@ def draw_array(array, **options) -> None:
     plt.yticks([])
 
     return plt.imshow(array, **options)
+
+def get_floor_odd_number(number: int) -> int:
+    """Gets the floor of the number and makes it odd.
+
+    number: int
+
+    returns: int
+    """
+    return int(np.floor(number) // 2 * 2 + 1)
 
 
 class Barn:
@@ -173,3 +183,18 @@ class Barn:
             plt.show()
         except KeyboardInterrupt:
             pass
+
+    def measure_uniformity(self) -> float:
+        """ Measures the uniformity of the barn.
+        """
+        num_birds = len(self.chickens)
+        kernel_size = get_floor_odd_number(np.sqrt(num_birds))
+        kernel = np.ones((kernel_size, kernel_size))
+        kernel[kernel_size // 2, kernel_size // 2] = 0
+        bird_locs = np.array(list(map(np.array, self.occupacy)))
+        occupancy_array = np.zeros(self.barn_size)
+        occupancy_array[bird_locs[:, 0], bird_locs[:, 1]] = 1
+        count_result = convolve2d(occupancy_array, kernel, mode='same')
+        filtered_result = count_result[bird_locs[:, 0], bird_locs[:, 1]]
+        return np.std(filtered_result)
+
