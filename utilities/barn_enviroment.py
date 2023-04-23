@@ -59,6 +59,11 @@ class Barn:
 
         self.occupacy = set(chicken.loc for chicken in self.chickens)
 
+    def temp(self, loc) -> float:
+        """Returns the temperature increase per second at loc, assuming the mass is 174 g (Average mass of a chicken)
+        """
+        return self.temp_fluxuations.heater_array[loc] / 174
+
     def __init__(self, size: tuple, num_chickens=500, tube_heaters=0) -> None:
         self.waterlines = WaterScape(size)
         self.feedlines = FoodScape(size)
@@ -147,7 +152,7 @@ class Barn:
     def draw(self) -> None:
         """ Draws the Top-Down view of the barn
         """
-        draw_array(self.temp_fluxuations.heater_array, cmap='viridis', origin='upper')
+        draw_array(self.temp_fluxuations.heater_array, cmap='cividis', origin='upper')
         draw_array(self.waterlines.waterline_array, cmap='viridis', origin='upper')
         draw_array(self.feedlines.feedline_array, cmap='viridis', origin='upper')
 

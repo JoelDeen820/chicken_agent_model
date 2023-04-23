@@ -8,12 +8,12 @@ from utilities.need_not_availible import NeedNotFoundException
 
 class TempScape:
     DISTANCE_BETWEEN_HEATERS = 3 #meters
-    HEAT_RADIUS = 15 / 2 # meters 
+    HEAT_RADIUS = 15 # meters 
     BARN_HEIGHT = 5 #meters
     HEATER_INTENSITY = 117000 / ((math.pow(BARN_HEIGHT, 2))) # In W
     DISTANCE_BETWEEN_LINES = 4 #in meters
     NUM_LINES = 2
-    X_PERMINITER_OFFSET = 1.5  # meters
+    X_PERMINITER_OFFSET = 2.5  # meters
     Y_PERMINITER_OFFSET = 1.5  # meters
     PIXELS_BETWEEN_HEATERS = int(DISTANCE_BETWEEN_HEATERS * 100 / CENTIMETERS_PER_PIXEL)
     HEAT_RADIUS_PIXELS = int((HEAT_RADIUS - BARN_HEIGHT) * 100 / CENTIMETERS_PER_PIXEL)
@@ -27,7 +27,7 @@ class TempScape:
         heat_points = []
         for i in range(self.num_lines):
             for j in range(self.size[0]): # uses all pixels as heat sources
-                x = int(self.Y_PERMINITER_OFFSET_PIXELS + j)
+                x = int(self.Y_PERMINITER_OFFSET_PIXELS + j * (self.PIXELS_BETWEEN_HEATERS // 10))
                 y = int(self.X_PERMINITER_OFFSET_PIXELS + i * self.PIXELS_BETWEEN_LINES)
                 heat_points.append((x, y))
         
@@ -59,7 +59,6 @@ class TempScape:
                 x = int(self.Y_PERMINITER_OFFSET_PIXELS + j * self.PIXELS_BETWEEN_HEATERS)
                 y = int(self.X_PERMINITER_OFFSET_PIXELS + i * self.PIXELS_BETWEEN_LINES)
                 heat_points.append((x, y))
-        print(heat_points)
         if points:
             self.__draw_points(heat_points)
         else:
@@ -77,13 +76,10 @@ class TempScape:
         self.num_lines: int = size[1] // self.PIXELS_BETWEEN_LINES
         self.heater_offset_y: int = self.Y_PERMINITER_OFFSET_PIXELS
         self.heater_array: np.array = np.zeros(size, dtype=np.uint8)
-        print(self.num_heaters)
-        print(self.num_lines)
-        #if(IS_TUBE_HEATER):
-         #   self.__generate_tube_heater_heatmap()
-        #else:
-         #   self.__generate_heatmap()
-        self.__generate_heatmap()
+        if(IS_TUBE_HEATER == 0):
+            self.__generate_heatmap()
+        else:
+            self.__generate_tube_heater_heatmap()
         self.__occupancy_grid: np.array = np.zeros(size, dtype=np.uint8)
 
     def get_vision(self, center: tuple[int, int], vision: int) -> np.array:
@@ -99,14 +95,3 @@ class TempScape:
         if locations.size == 1:
             raise NeedNotFoundException
         return locations[:, 0, :]
-
-    def get_resource(self, point: tuple[int, int]) -> float:
-        """Get the resource at the given point.
-
-        point: tuple, (x, y) in pixels
-
-        returns: float, resource at the given point."""
-        resource = self.heater_array[point] * 100
-        if resource == 100:
-            print("warm up")
-        return resource
