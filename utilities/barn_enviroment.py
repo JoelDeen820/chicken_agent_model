@@ -12,6 +12,7 @@ from utilities.need_not_availible import NeedNotFoundException
 from utilities.utils import underride
 from utilities.waterscape import WaterScape
 from utilities.foodscape import FoodScape
+from utilities.tempscape import TempScape
 
 
 def make_locs(n, m):
@@ -68,10 +69,15 @@ class Barn:
 
         self.occupacy = set(chicken.loc for chicken in self.chickens)
 
-    def __init__(self, size: tuple, num_chickens=500) -> None:
+    def temp(self, loc) -> float:
+        """Returns the temperature increase per second at loc, assuming the mass is 174 g (Average mass of a chicken)
+        """
+        return self.temp_fluxuations.heater_array[loc] / 174
+
+    def __init__(self, size: tuple, num_chickens=500, tube_heaters=0) -> None:
         self.waterlines = WaterScape(size)
         self.feedlines = FoodScape(size)
-        # self.temp_fluxuations = TempScape(size)
+        self.temp_fluxuations = TempScape(size, tube_heaters)
         self.barn_size = size
         self.occupacy = set()
         self.chickens = []
@@ -95,7 +101,7 @@ class Barn:
             elif need == ChickenNeed.HUNGER:
                 locs = self.feedlines.get_vision(loc, vision)
             elif need == ChickenNeed.TEMPERATURE:
-                pass
+                locs = self.temp_fluxuations.get_vision(loc, vision)
         except NeedNotFoundException:
             return self.wander(loc, vision, wander_angle)
 
@@ -156,6 +162,7 @@ class Barn:
     def draw(self) -> None:
         """ Draws the Top-Down view of the barn
         """
+        draw_array(self.temp_fluxuations.heater_array, cmap='cividis', origin='upper')
         draw_array(self.waterlines.waterline_array, cmap='viridis', origin='upper')
         draw_array(self.feedlines.feedline_array, cmap='viridis', origin='upper')
 

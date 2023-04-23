@@ -29,6 +29,7 @@ class Chicken:
 
     THIRST_DECAY = 1
     HUNGER_DECAY = 1
+    TEMPERATURE_DECAY = 1
 
     BIRD_VISION = int(33 // CENTIMETERS_PER_PIXEL)
     BIRD_VISION_DEVIATION = 1
@@ -82,6 +83,17 @@ class Chicken:
         if hunger_addition != 0:
             self.search_angle = generate_random_angle()
 
+    def __evaluate_temperature(self, env) -> None:
+        """Evaluates the bird's need to warm up or cool down"""
+        loc_temp = env.temp(self.loc)
+        if(loc_temp > 0):
+            self.temperature += loc_temp
+        else:
+            self.temperature -= Chicken.TEMPERATURE_DECAY
+
+        if self.need == ChickenNeed.TEMPERATURE:
+            self.search_angle = generate_random_angle()
+
     def step(self, env) -> None:
         """Look around, move, and harvest.
 
@@ -92,4 +104,4 @@ class Chicken:
         self.loc = env.look_and_move(self.loc, self.vision, self.need, generate_random_angle())
         self.__evaluate_thirst(env)
         self.__evaluate_hunger(env)
-        # self.temperature += env.temp(self.loc)
+        self.__evaluate_temperature(env)
