@@ -1,17 +1,18 @@
+import math
 
 import numpy as np
-import math
 from skimage.draw import disk
 
 from utilities.chicken_utils import CENTIMETERS_PER_PIXEL, filter_locs, make_visible_locs
 from utilities.need_not_availible import NeedNotFoundException
 
+
 class TempScape:
-    DISTANCE_BETWEEN_HEATERS = 3 #meters
-    HEAT_RADIUS = 15 # meters 
-    BARN_HEIGHT = 5 #meters
-    HEATER_INTENSITY = 117000 / ((math.pow(BARN_HEIGHT, 2))) # In W
-    DISTANCE_BETWEEN_LINES = 4 #in meters
+    DISTANCE_BETWEEN_HEATERS = 3  # meters
+    HEAT_RADIUS = 15  # meters
+    BARN_HEIGHT = 5  # meters
+    HEATER_INTENSITY = 117000 / (math.pow(BARN_HEIGHT, 2))  # In W
+    DISTANCE_BETWEEN_LINES = 4  # in meters
     NUM_LINES = 2
     X_PERMINITER_OFFSET = 2.5  # meters
     Y_PERMINITER_OFFSET = 1.5  # meters
@@ -21,16 +22,15 @@ class TempScape:
     X_PERMINITER_OFFSET_PIXELS = int(X_PERMINITER_OFFSET * 100 / CENTIMETERS_PER_PIXEL)
     Y_PERMINITER_OFFSET_PIXELS = int(Y_PERMINITER_OFFSET * 100 / CENTIMETERS_PER_PIXEL)
 
-
     def __generate_tube_heater_heatmap(self, points=False) -> None:
         """Generate the heatmap for tube heaters."""
         heat_points = []
         for i in range(self.num_lines):
-            for j in range(self.size[0]): # uses all pixels as heat sources
+            for j in range(self.size[0]):  # uses all pixels as heat sources
                 x = int(self.Y_PERMINITER_OFFSET_PIXELS + j * (self.PIXELS_BETWEEN_HEATERS // 10))
                 y = int(self.X_PERMINITER_OFFSET_PIXELS + i * self.PIXELS_BETWEEN_LINES)
                 heat_points.append((x, y))
-        
+
         if points:
             self.__draw_points(heat_points)
         else:
@@ -41,8 +41,9 @@ class TempScape:
         for x, y in points:
             rr, cc = disk((x, y), self.HEAT_RADIUS_PIXELS, shape=self.size)
             for i in range(len(rr)):
-                if(math.dist((x,y), (rr[i],cc[i])) != 0):
-                    self.heater_array[rr[i], cc[i]] += self.HEATER_INTENSITY / ((math.pow(math.dist((x,y), (rr[i],cc[i])), 2)))
+                if math.dist((x, y), (rr[i], cc[i])) != 0:
+                    self.heater_array[rr[i], cc[i]] += self.HEATER_INTENSITY / (
+                        (math.pow(math.dist((x, y), (rr[i], cc[i])), 2)))
                 else:
                     self.heater_array[rr[i], cc[i]] += self.HEATER_INTENSITY
 
@@ -50,7 +51,7 @@ class TempScape:
         """Draws the given points."""
         for x, y in points:
             self.heater_array[x, y] = self.HEATER_INTENSITY
-    
+
     def __generate_heatmap(self, points=False) -> None:
         """Generate the heatmap for ceiling heaters."""
         heat_points = []
@@ -64,11 +65,11 @@ class TempScape:
         else:
             self.__draw_heat_radius(heat_points)
 
-
-    def __init__(self, size: tuple, IS_TUBE_HEATER = 0) -> None:
+    def __init__(self, size: tuple, is_tube_heater=0) -> None:
         """Initialize the TempScape object.
 
         size: tuple, (width, height) in pixels
+        is_tube_heater: int, 0 for ceiling heaters, 1 for tube heaters
         """
         self.size = size
         num_heaters: int = size[0] // self.PIXELS_BETWEEN_HEATERS
@@ -76,7 +77,7 @@ class TempScape:
         self.num_lines: int = size[1] // self.PIXELS_BETWEEN_LINES
         self.heater_offset_y: int = self.Y_PERMINITER_OFFSET_PIXELS
         self.heater_array: np.array = np.zeros(size, dtype=np.uint8)
-        if(IS_TUBE_HEATER == 0):
+        if is_tube_heater == 0:
             self.__generate_heatmap()
         else:
             self.__generate_tube_heater_heatmap()
