@@ -9,8 +9,6 @@ conda env create -f environment.yml
 
 Note, 1 pixel is equal to 3 cm.
 
-Feed lines are about 0.1 meters between each other, with the feeder diameter of 0.1 meters.
-
 To-Do List
 - [x] Create a simple barn environment
   - This will need to be appended to as the other few classes are added
@@ -19,7 +17,7 @@ To-Do List
   - Center needs to affect occupancy of the barn its self (about 10 cm Diameter)
   - The feeder needs to be able to be filled with food (See waterline implementation)
 - [x] Create the Waterline Class
-- [ ] Create the temperature map of the barn
+- [x] Create the temperature map of the barn
   - Two types of heaters
     - Tube heaters (assume height of the barn)
     - Central Heaters (like this one [https://solvenoequipment.com/en/solveno-rmx-acv-fan-heater/](https://solvenoequipment.com/en/solveno-rmx-acv-fan-heater/)
