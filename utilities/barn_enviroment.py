@@ -74,7 +74,7 @@ class Barn:
         """
         return self.temp_fluxuations.heater_array[loc] / 174
 
-    def __init__(self, size: tuple, num_chickens=500, tube_heaters=0) -> None:
+    def __init__(self, size: tuple, num_chickens=500, tube_heaters=False) -> None:
         self.waterlines = WaterScape(size)
         self.feedlines = FoodScape(size)
         self.temp_fluxuations = TempScape(size, tube_heaters)

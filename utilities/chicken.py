@@ -57,7 +57,7 @@ class Chicken:
             self.need = ChickenNeed.THIRST
         elif self.hunger < 0:
             self.need = ChickenNeed.HUNGER
-        elif self.temperature < Chicken.IDEAL_MIN_TEMP or self.temperature > Chicken.IDEAL_MAX_TEMP:
+        elif self.IDEAL_MIN_TEMP < self.temperature < self.IDEAL_MAX_TEMP:
             self.need = ChickenNeed.TEMPERATURE
         else:
             self.need = ChickenNeed.HAPPY
@@ -86,13 +86,7 @@ class Chicken:
     def __evaluate_temperature(self, env) -> None:
         """Evaluates the bird's need to warm up or cool down"""
         loc_temp = env.temp(self.loc)
-        if(loc_temp > 0):
-            self.temperature += loc_temp
-        else:
-            self.temperature -= Chicken.TEMPERATURE_DECAY
-
-        if self.need == ChickenNeed.TEMPERATURE:
-            self.search_angle = generate_random_angle()
+        self.temperature = loc_temp  # TODO: Add tempuature from other birds
 
     def step(self, env) -> None:
         """Look around, move, and harvest.
